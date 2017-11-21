@@ -1,3 +1,4 @@
+import pdb
 import capture
 import sys
 import config
@@ -10,11 +11,14 @@ else:
 
 config = config.Config()
 features = capture.VideoFeatures(config)
-for folderpath in glob.glob("/Volumes/data/vsp/data/*"):
+for folderpath in glob.glob("/Users/Pierre/Dropbox/TUM 1718 (1)/HW2_features/features_1-7/*"):
     print("Processing {}...".format(folderpath))
     features.initFolder(folderpath)
-    features.processFolder()
-    features.save()
+    features.load()
+    pdb.set_trace()
+    # features.processFolder()
+
+    # features.save()
 
 # features.computeFeatures()
 

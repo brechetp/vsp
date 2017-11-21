@@ -8,6 +8,7 @@ import scipy.io as sio
 import glob
 import csv
 import pickle
+import ast
 
 
 
@@ -63,6 +64,25 @@ class VideoFeatures(object):
         """Sets a new feature dict with the correct keys"""
         self._features.clear()
         self._features = {feat: dict() for feat in self.config.compute}
+        return
+
+
+    def load(self):
+        """Reads the features csv files inside the object folder"""
+        for csvfname in glob.glob("{}/*.csv".format(self.folderpath)): # for all the file names
+            basename = os.path.basename(csvfname).split('.')[0] # output_xxx
+            feat = basename.split('_')[1].upper() # assumes correct file name, will be HOG, SIFT...
+            self.features[feat] = dict() # we clear the dictionary
+            with open(csvfname, 'r') as csvfile:
+                csvrdr = csv.reader(csvfile, delimiter=',', quotechar='"')
+                next(csvrdr, None) # we skip the header
+                for row in csvrdr: # for all possible lines
+                    fileID = row[0] # the file ID
+                    if not fileID in self.features[feat]:
+                        self.features[feat][fileID] = [] # empty list
+                    serialized = ast.literal_eval(row[2]) # the byte string of the feature
+                    self.features[feat][fileID].append(pickle.loads(serialized)) # unserialize the FD
+        return
 
 
 
