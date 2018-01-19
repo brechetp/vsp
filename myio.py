@@ -17,3 +17,12 @@ def random_image(folder):
     name = random.choice(os.listdir(folder))
     return folder + name
 
+def write_list(lst, fname):
+    '''Write a list to a file'''
+    with open(fname, 'w') as _file:
+        _file.writelines([item+'\n' for item in lst])
+    return
+
+
+if __name__ == "__main__":
+    write_list(['a', 'a g w', '.', '', 'w'], 'save.txt')
